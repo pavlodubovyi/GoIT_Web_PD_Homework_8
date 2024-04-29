@@ -14,7 +14,7 @@ def create_event():
     message = {
         'event': 'Test event',
         'message': "Test message",
-        'detail': f"Date: {datetime.now().isoformat()}"
+        'detail': f"Date: {datetime.now()}"
     }
 
     channel.basic_publish(exchange='Web21 events message', routing_key='', body=json.dumps(message).encode())

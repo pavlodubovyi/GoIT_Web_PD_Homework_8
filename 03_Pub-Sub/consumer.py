@@ -13,8 +13,10 @@ def main():
         pika.ConnectionParameters(host='localhost', port=5672, credentials=credentials))
     channel = connection.channel()
 
+    # channel.exchange_declare(exchange="Web21 events message", exchange_type="fanout")
     q = channel.queue_declare(queue='', exclusive=True)
     name_q = q.method.queue
+    print(f"Random {name_q} queue created")
     channel.queue_bind(exchange="Web21 events message", queue=name_q)
 
     def callback(ch, method, properties, body):
