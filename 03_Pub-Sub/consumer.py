@@ -1,3 +1,4 @@
+
 import json
 import os
 import sys
@@ -12,17 +13,15 @@ def main():
         pika.ConnectionParameters(host='localhost', port=5672, credentials=credentials))
     channel = connection.channel()
 
-    channel.queue_declare(queue='web_21_queue', durable=True)
+    q = channel.queue_declare(queue='', exclusive=True)
+    name_q = q.method.queue
+    channel.queue_bind(exchange="Web21 events message", queue=name_q)
 
     def callback(ch, method, properties, body):
         message = json.loads(body.decode())
         print(f" [x] Received {message}")
-        time.sleep(0.5)
-        print(f" [x] Completed {method.delivery_tag} task")
-        ch.basic_ack(delivery_tag=method.delivery_tag)
 
-    channel.basic_qos(prefetch_count=1)
-    channel.basic_consume(queue='web_21_queue', on_message_callback=callback)
+    channel.basic_consume(queue=name_q, on_message_callback=callback, auto_ack=True)
 
     print(' [*] Waiting for messages. To exit press CTRL+C')
     channel.start_consuming()
