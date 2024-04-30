@@ -1,5 +1,4 @@
-from bson import json_util
-from mongoengine import connect, Document, StringField, ReferenceField, ListField, CASCADE
+from mongoengine import connect, Document, StringField, ReferenceField, ListField, CASCADE, BooleanField
 
 connect(db="PD_homework_8", host="mongodb+srv://userweb21:567234@cluster0.vkwfwwg.mongodb.net/")
 
@@ -18,8 +17,10 @@ class Quote(Document):
     quote = StringField()
     meta = {"collection": "quotes"}
 
-    def to_json(self, *args, **kwargs):
-        data = self.to_mongo(*args, **kwargs)
-        data["author"] = self.author.fullname
-        return json_util.dumps(data, ensure_ascii=False)
-    
+
+class Contact(Document):
+    fullname = StringField(max_length=100, required=True)
+    email = StringField(max_length=50, required=True)
+    emailed = BooleanField(default=False)
+    meta = {"collection": "contacts"}
+
