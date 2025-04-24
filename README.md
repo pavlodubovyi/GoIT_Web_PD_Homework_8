@@ -1,4 +1,4 @@
-# GoIT Web Python Homework 8
+# MongoDB quotes database and email simulator
 
 ## Overview
 
